@@ -31,9 +31,15 @@ func Crypt(pass, salt string) (string, error) {
 	defer C.free(unsafe.Pointer(c_salt))
 
 	mu.Lock()
-	c_enc := C.crypt(c_pass, c_salt)
+	c_enc, err := C.crypt(c_pass, c_salt)
 	defer C.free(unsafe.Pointer(c_enc))
 	mu.Unlock()
 
+	if c_enc == nil {
+		return "", err
+	}
+	// Return nil error if the string is non-nil.
+	// This happens because crypt seems to leak a spurious ENOENT which
+	// is left over after it checks the /proc/sys file for fips mode.
 	return C.GoString(c_enc), nil
 }

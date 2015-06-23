@@ -1,8 +1,6 @@
 package crypt
 
 import (
-	"runtime"
-	"sync"
 	"testing"
 )
 
@@ -15,7 +13,7 @@ func TestCryptSHA512(t *testing.T) {
 
 	enc, err := Crypt(pass, salt)
 	if err != nil {
-		t.Errorf("unexpected error", err)
+		t.Errorf("unexpected error: %v", err)
 	}
 
 	if enc != hash {
@@ -32,18 +30,29 @@ func TestCryptMD5(t *testing.T) {
 
 	enc, err := Crypt(pass, salt)
 	if err != nil {
-		t.Errorf("unexpected error", err)
+		t.Errorf("unexpected error: %t, (got %s)", err, enc)
 	}
 
 	if enc != hash {
-		t.Errorf("hashed password mismatch, expected [%s], got [%s], hash, enc")
+		t.Errorf("hashed password mismatch, expected [%s] but got [%s]", hash, enc)
 	}
 }
 
 func TestCryptErrors(t *testing.T) {
-	_, err := Crypt("weakPass", "")
-	if err == nil {
-		t.Error("Expected error for zero length salt")
+	tests := [][]string{
+		{"no salt", ""},
+		{"single char", "/"},
+		{"first char bad", "!x"},
+		{"second char bad", "Z%"},
+		{"both chars bad", ":@"},
+		{"un$upported algorithm", "$2$"},
+		{"unsupported_algorithm", "_1"},
 	}
 
+	for _, test := range tests {
+		_, err := Crypt("password", test[1])
+		if err == nil {
+			t.Error("Expected error when %s", test[0])
+		}
+	}
 }

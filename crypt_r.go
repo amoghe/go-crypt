@@ -8,7 +8,6 @@
 package crypt
 
 import (
-	"fmt"
 	"unsafe"
 )
 
@@ -29,7 +28,7 @@ char *gnu_ext_crypt(char *pass, char *salt) {
 
   enc = crypt_r(pass, salt, &data);
   if(enc == NULL) {
-    return "\0";
+    return NULL;
   }
 
   ret = (char *)malloc(strlen(enc)+1); // for trailing null
@@ -44,18 +43,20 @@ import "C"
 // Crypt provides a wrapper around the glibc crypt_r() function.
 // For the meaning of the arguments, refer to the package README.
 func Crypt(pass, salt string) (string, error) {
-	if len(salt) < 2 {
-		return "", fmt.Errorf("Invalid salt length")
-	}
-
 	c_pass := C.CString(pass)
 	defer C.free(unsafe.Pointer(c_pass))
 
 	c_salt := C.CString(salt)
 	defer C.free(unsafe.Pointer(c_salt))
 
-	c_enc := C.gnu_ext_crypt(c_pass, c_salt)
+	c_enc, err := C.gnu_ext_crypt(c_pass, c_salt)
 	defer C.free(unsafe.Pointer(c_enc))
 
+	if c_enc == nil {
+		return "", err
+	}
+	// Return nil error if the string is non-nil.
+	// This happens because crypt seems to leak a spurious ENOENT which
+	// is left over after it checks the /proc/sys file for fips mode.
 	return C.GoString(c_enc), nil
 }
