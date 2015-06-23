@@ -1,7 +1,7 @@
-crpyt
-=====
+go-crypt (`crypt`)
+==================
 
-Package crypt provides go language wrappers around crypt(3). For further information on crypt see the
+Package `crypt` provides go language wrappers around crypt(3). For further information on crypt see the
 [man page](http://man7.org/linux/man-pages/man3/crypt.3.html)
 
 If you have questions about how to use crypt (the C function), it is likely this is not the package you
