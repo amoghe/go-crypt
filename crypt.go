@@ -8,6 +8,7 @@
 package crypt
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -41,5 +42,6 @@ func Crypt(pass, salt string) (string, error) {
 	// Return nil error if the string is non-nil.
 	// This happens because crypt seems to leak a spurious ENOENT which
 	// is left over after it checks the /proc/sys file for fips mode.
-	return C.GoString(c_enc), nil
+	fmt.Println("Returning err %v", err)
+	return C.GoString(c_enc), err
 }

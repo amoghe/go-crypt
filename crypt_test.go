@@ -52,7 +52,7 @@ func TestCryptErrors(t *testing.T) {
 	for _, test := range tests {
 		enc, err := Crypt("password", test[1])
 		if err == nil {
-			t.Errorf("Expected error when testing %s, instead got", test[0], enc)
+			t.Errorf("Expected error when testing %s, instead got %s", test[0], enc)
 		}
 	}
 }
