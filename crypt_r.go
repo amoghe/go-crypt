@@ -1,7 +1,10 @@
 // +build linux
 
-// Package crypt provides wrappers around functions available in crypt.h,
-// either crypt() or crypt_r() (where available).
+// Package crypt provides wrappers around functions available in crypt.h
+//
+// It wraps around the GNU specific extension (crypt_r) when it is available
+// (i.e. where GOOS=linux). This makes the go function reentrant (and thus
+// callable from concurrent goroutines).
 package crypt
 
 import (
@@ -39,10 +42,7 @@ char *gnu_ext_crypt(char *pass, char *salt) {
 import "C"
 
 // Crypt provides a wrapper around the glibc crypt_r() function.
-//
-// It wraps around the GNU specific extension (crypt_r) since it is available on
-// platforms where GOOS=linux. This makes the go function reentrant (and thus a
-// better go citizen). (For other platforms see crypt.go)
+// For the meaning of the arguments, refer to the package README.
 func Crypt(pass, salt string) (string, error) {
 	if len(salt) < 2 {
 		return "", fmt.Errorf("Invalid salt length")

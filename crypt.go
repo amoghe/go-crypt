@@ -1,7 +1,10 @@
 // +build darwin freebsd netbsd
 
-// Package crypt provides wrappers around functions available in crypt.h,
-// either crypt() or crypt_r() (where available).
+// Package crypt provides wrappers around functions available in crypt.h
+//
+// It wraps around the GNU specific extension (crypt) when the reentrant version
+// (crypt_r) is unavailable. The non-reentrant version is guarded by a global lock
+// so as to be safely callable from concurrent goroutines.
 package crypt
 
 import (
@@ -19,9 +22,7 @@ var (
 )
 
 // Crypt provides a wrapper around the glibc crypt() function.
-//
-// Unfortunately the glibc crypt() function is not reentrant, so this function is
-// guarded by a global lock.
+// For the meaning of the arguments, refer to the README.
 func Crypt(pass, salt string) (string, error) {
 	c_pass := C.CString(pass)
 	defer C.free(unsafe.Pointer(c_pass))
