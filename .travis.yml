@@ -1,5 +1,9 @@
 sudo:     false
 language: go
 
-go:
-  - tip
+install: go get ./...
+
+script:
+  - uname -a
+  - lsb_release -a
+  - go build
