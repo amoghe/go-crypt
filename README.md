@@ -1,6 +1,8 @@
 go-crypt (`crypt`)
 ==================
 
+[![Build Status](https://travis-ci.org/amoghe/go-crypt.svg)](https://travis-ci.org/amoghe/go-crypt)
+
 Package `crypt` provides go language wrappers around crypt(3). For further information on crypt see the
 [man page](http://man7.org/linux/man-pages/man3/crypt.3.html)
 
