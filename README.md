@@ -7,6 +7,10 @@ Package `crypt` provides go language wrappers around crypt(3). For further infor
 If you have questions about how to use crypt (the C function), it is likely this is not the package you
 are looking for.
 
+**NOTE** Depending on the platform, this package provides a `Crypt` function that is backed by different
+flavors of the libc crypt. This is done by detecting the GOOS and trying to build using `crypt_r` (the GNU
+extension) when on linux, and wrapping around plain 'ol `crypt` (guarded by a global lock) otherwise.
+
 Example
 -------
 ```go
