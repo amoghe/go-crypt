@@ -50,9 +50,9 @@ func TestCryptErrors(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		_, err := Crypt("password", test[1])
+		enc, err := Crypt("password", test[1])
 		if err == nil {
-			t.Error("Expected error when %s", test[0])
+			t.Errorf("Expected error when testing %s, instead got", test[0], enc)
 		}
 	}
 }
