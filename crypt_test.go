@@ -44,7 +44,7 @@ func TestCryptErrors(t *testing.T) {
 
 	tokens := strings.Split(LibCVersion(), ".")
 	if tokens[1] < "17" {
-		t.Logf("Skipping error tests. libc version too old (got: %s.%s, need: 2.%s)",
+		t.Skipf("Skipping error tests. libc version too old (got: %s.%s, need: 2.%s)",
 			tokens[0], tokens[1], FixedMinorVersion)
 	}
 
