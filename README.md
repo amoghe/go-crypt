@@ -81,21 +81,25 @@ section from the man page):
 Platforms
 ---------
 
-This package has been tested on ubuntu 14.04 which ships with libc6. Additionally, this package assumes
-that on GOOS=linux the GNU extensions to crypt are available and therefore reentrant versions of the
-crypt function (`crypt_r`) is available, and attempts to use that instead.
+This package has been tested on the following platforms:
+- ubuntu 14.04.2 (libc 2.19)
+- ubuntu 12.04.5 (libc 2.15)
+- centos         (libc 2.17)
+- fedora 22      (libc 2.21)
 
-On other platforms (freebsd, netbsd) it makes no such assumptions and will wrap around the plain crypt
-function instead (providing serialized access to it).
+All the platforms tested on have GNU libc (with extensions) so that the GOOS=linux always
+compiles the reentrant versions of the crypt function (`crypt_r`), and exposes it to go land.
 
-Unfortunately, I do not have access to machines that run anything other than Ubuntu, hence the other
+Other platforms (freebsd, netbsd) should also work (in theory) since their libc expose at least
+a posix compliant crypt function. On these platforms the fallback should compile and expose the
+'plain' (non reentrant, thus globally locked) crypt function.
+
+Unfortunately, I do not have access to machines that run anything other than Linux, hence the other
 platforms have not been tested, however I believe they should work just fine. If you can verify this
 (or provide a patch that fixes this), I would be grateful.
 
 TODO
 ----
-
-* Gather errno from C land.
 * Find someone with access to *BSD system(s)
 
 License
