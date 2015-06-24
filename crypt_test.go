@@ -1,6 +1,7 @@
 package crypt
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -39,6 +40,14 @@ func TestCryptMD5(t *testing.T) {
 }
 
 func TestCryptErrors(t *testing.T) {
+	FixedMinorVersion := "17"
+
+	tokens := strings.Split(LibCVersion(), ".")
+	if tokens[1] < "17" {
+		t.Logf("Skipping error tests. libc version too old (got: %s.%s, need: 2.%s)",
+			tokens[0], tokens[1], FixedMinorVersion)
+	}
+
 	tests := [][]string{
 		{"no salt", ""},
 		{"single char", "/"},

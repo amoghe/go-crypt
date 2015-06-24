@@ -56,7 +56,7 @@ func Crypt(pass, salt string) (string, error) {
 		return "", err
 	}
 	// Return nil error if the string is non-nil.
-	// This happens because crypt seems to leak a spurious ENOENT which
-	// is left over after it checks the /proc/sys file for fips mode.
+	// As per the errno.h manpage, functions are allowed to set errno
+	// on success. Caller should ignore errno on success.
 	return C.GoString(c_enc), nil
 }
