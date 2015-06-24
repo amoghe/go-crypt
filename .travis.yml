@@ -1,9 +1,5 @@
 sudo:     false
 language: go
 
-install: go get ./...
-
-script:
-  - uname -a
-  - lsb_release -a
-  - go build
+go:
+  - 1.4
