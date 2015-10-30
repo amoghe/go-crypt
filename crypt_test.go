@@ -18,7 +18,7 @@ func TestCryptSHA512(t *testing.T) {
 	}
 
 	if enc != hash {
-		t.Errorf("hashed password mismatch, expected [%s], got [%s], hash, enc")
+		t.Errorf("hashed password mismatch, expected [%s], got [%s]", hash, enc)
 	}
 }
 
@@ -64,4 +64,19 @@ func TestCryptErrors(t *testing.T) {
 			t.Errorf("Expected error when testing %s, instead got %s", test[0], enc)
 		}
 	}
+}
+
+func TestCheckMemoryAllocation(t *testing.T) {
+	var (
+		pass  = "password"
+		salt  = "$6$saltedsalted64$"
+		niter = 512
+	)
+
+	for i := 0; i < niter; i++ {
+		h, _ := Crypt(pass, salt)
+		_ = h
+	}
+
+	// TODO: check all mem allocations are free'd
 }

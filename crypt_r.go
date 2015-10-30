@@ -50,11 +50,11 @@ func Crypt(pass, salt string) (string, error) {
 	defer C.free(unsafe.Pointer(c_salt))
 
 	c_enc, err := C.gnu_ext_crypt(c_pass, c_salt)
-	defer C.free(unsafe.Pointer(c_enc))
-
 	if c_enc == nil {
 		return "", err
 	}
+	defer C.free(unsafe.Pointer(c_enc))
+
 	// Return nil error if the string is non-nil.
 	// As per the errno.h manpage, functions are allowed to set errno
 	// on success. Caller should ignore errno on success.
