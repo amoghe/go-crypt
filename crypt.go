@@ -9,10 +9,11 @@ package crypt
 
 import (
 	"sync"
+	"unsafe"
 )
 
 /*
-#define _XOPEN_SOURCE 700
+#define _GNU_SOURCE
 #include <unistd.h>
 */
 import "C"
@@ -32,12 +33,13 @@ func Crypt(pass, salt string) (string, error) {
 
 	mu.Lock()
 	c_enc, err := C.crypt(c_pass, c_salt)
-	defer C.free(unsafe.Pointer(c_enc))
 	mu.Unlock()
 
 	if c_enc == nil {
 		return "", err
 	}
+	defer C.free(unsafe.Pointer(c_enc))
+
 	// Return nil error if the string is non-nil.
 	// As per the errno.h manpage, functions are allowed to set errno
 	// on success. Caller should ignore errno on success.
