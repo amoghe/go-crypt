@@ -19,6 +19,7 @@ import (
 #include <stdlib.h>
 #include <string.h>
 #include <crypt.h>
+#include <stdlib.h>
 
 char *gnu_ext_crypt(char *pass, char *salt) {
   char *enc = NULL;
