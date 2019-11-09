@@ -11,11 +11,10 @@ import (
 	"unsafe"
 )
 
+
 /*
 #cgo LDFLAGS: -lcrypt
-
 #define _GNU_SOURCE
-
 #include <stdlib.h>
 #include <string.h>
 #include <crypt.h>
@@ -32,7 +31,7 @@ char *gnu_ext_crypt(char *pass, char *salt) {
   }
 
   ret = (char *)malloc(strlen(enc)+1); // for trailing null
-  strncpy(ret, enc, strlen(enc));
+  memcpy(ret, enc, strlen(enc));
   ret[strlen(enc)]= '\0'; // paranoid
 
   return ret;

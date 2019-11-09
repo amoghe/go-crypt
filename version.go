@@ -8,7 +8,7 @@ package crypt
 import "C"
 
 // Returns version string from libc
-func LibCVersion() string {
+func libCVersion() string {
 	c_ver := C.gnu_get_libc_version()
 	return C.GoString(c_ver)
 }
