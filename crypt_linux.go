@@ -11,14 +11,13 @@ import (
 	"unsafe"
 )
 
+
 /*
 #cgo LDFLAGS: -lcrypt
-
 #define _GNU_SOURCE
-
-#include <stdlib.h>
-#include <string.h>
-#include <crypt.h>
+#include <stdlib.h> // for NULL
+#include <string.h> // for strlen
+#include <crypt.h>  // for crypt()
 
 char *gnu_ext_crypt(char *pass, char *salt) {
   char *enc = NULL;
@@ -32,7 +31,7 @@ char *gnu_ext_crypt(char *pass, char *salt) {
   }
 
   ret = (char *)malloc(strlen(enc)+1); // for trailing null
-  strncpy(ret, enc, strlen(enc));
+  memcpy(ret, enc, strlen(enc));
   ret[strlen(enc)]= '\0'; // paranoid
 
   return ret;

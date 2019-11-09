@@ -1,4 +1,4 @@
-// +build darwin freebsd netbsd
+// +build freebsd openbsd
 
 // Package crypt provides wrappers around functions available in crypt.h
 //
@@ -40,7 +40,9 @@ func Crypt(pass, salt string) (string, error) {
 	if c_enc == nil {
 		return "", err
 	}
-	defer C.free(unsafe.Pointer(c_enc))
+	// returned pointer points to static data which is overwritten
+	// in each call, so dont free it
+	// defer C.free(unsafe.Pointer(c_enc))
 
 	// Return nil error if the string is non-nil.
 	// As per the errno.h manpage, functions are allowed to set errno
