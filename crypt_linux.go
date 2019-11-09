@@ -15,9 +15,9 @@ import (
 /*
 #cgo LDFLAGS: -lcrypt
 #define _GNU_SOURCE
-#include <stdlib.h>
-#include <string.h>
-#include <crypt.h>
+#include <stdlib.h> // for NULL
+#include <string.h> // for strlen
+#include <crypt.h>  // for crypt()
 
 char *gnu_ext_crypt(char *pass, char *salt) {
   char *enc = NULL;
