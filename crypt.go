@@ -1,4 +1,4 @@
-// +build darwin freebsd netbsd
+// +build freebsd netbsd
 
 // Package crypt provides wrappers around functions available in crypt.h
 //
