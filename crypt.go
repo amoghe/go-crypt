@@ -1,4 +1,4 @@
-// +build darwin freebsd netbsd
+// +build freebsd netbsd
 
 // Package crypt provides wrappers around functions available in crypt.h
 //
@@ -41,6 +41,16 @@ func Crypt(pass, salt string) (string, error) {
 		return "", err
 	}
 	defer C.free(unsafe.Pointer(c_enc))
+
+	// From the crypt(3) man-page. Upon error, crypt_r writes an invalid
+	// hashed passphrase to the output field of their data argument, and
+	// crypt writes an invalid hash to its static storage area. This
+	// string will be shorter than 13 characters, will begin with a ‘*’,
+	// and will not compare equal to setting.
+	hash := C.GoString(c_enc)
+	if len(hash) > 0 && hash[0] == '*' {
+		return "", err
+	}
 
 	// Return nil error if the string is non-nil.
 	// As per the errno.h manpage, functions are allowed to set errno
