@@ -2,6 +2,8 @@ package crypt
 
 import (
 	"testing"
+
+	"github.com/emilymaier/cmemory"
 )
 
 func TestCryptSHA512(t *testing.T) {
@@ -68,10 +70,12 @@ func TestCheckMemoryAllocation(t *testing.T) {
 		niter = 512
 	)
 
+	cmemory.StartInstrumentation()
 	for i := 0; i < niter; i++ {
 		h, _ := Crypt(pass, salt)
 		_ = h
 	}
+	cmemory.StopInstrumentation()
 
 	// TODO: check all mem allocations are free'd
 }
